@@ -14,11 +14,10 @@ import android.os.Environment;
 
 public class PConfig {
 
-//    private static String username ="ShangHai_Inner_Test_74543234";
-//    private static String authCode ="T20_73452342344343";
 
-    private static String username ="ShangHai_Inner_695785";
-    private static String authCode ="T30_89445556698874";
+    private static String username ="";
+    private static String authCode ="";
+
 
     public static void setAuth(String mUsername, String mAuthCode){
         username = mUsername;
