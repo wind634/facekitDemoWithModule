@@ -102,7 +102,7 @@ public class FaceKit {
                 Log.e(PConfig.projectLogTag, "Fail to get hardware info");
             } else {
                 // 从服务器上获取，请先修改 pixtalks.facekitsdk.PConfig.java username 和 authCode字段
-                PixtalksUtils.getLicenceFromSever(PConfig.getUsername(), PConfig.getAuthCode(), hardwareInfo);
+                PixtalksUtils.getLicenceFromSever(PConfig.getUsername(), PConfig.getAuthCode(), hardwareInfo,null);
                 return PConfig.licenceNotFoundCode;
             }
         } else {

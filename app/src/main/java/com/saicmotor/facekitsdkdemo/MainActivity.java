@@ -66,15 +66,6 @@ public class MainActivity extends AppCompatActivity {
     // 1 速度比较快，但是不能和PC模型互用
     ModelSelector modelSelector = new ModelSelector(1);
 
-    // Used to load the 'lib' library on application startup.
-    static {
-        try {
-            System.loadLibrary("pixtalks_facekit_v1_2");
-        } catch (Exception e) {
-            Log.e(logTag, "Fail to load pixtalks facekit lib");
-        }
-    }
-
     private int loadModel() throws IOException {
         byte[] detectParam, detectBin;
         byte[] landmarkParam, landmarkBin;
@@ -217,7 +208,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.e(PConfig.projectLogTag, "Fail to get hardware info");
             } else {
                 // 从服务器上获取，请先修改 pixtalks.facekitsdk.PConfig.java username 和 authCode字段
-                PixtalksUtils.getLicenceFromSever(PConfig.getUsername(), PConfig.getAuthCode(), hardwareInfo);
+                PixtalksUtils.getLicenceFromSever(PConfig.getUsername(), PConfig.getAuthCode(), hardwareInfo,null);
             }
         } else {
             hasLicence = true;

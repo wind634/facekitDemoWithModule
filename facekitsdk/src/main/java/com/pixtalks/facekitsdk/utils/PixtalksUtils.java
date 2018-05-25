@@ -87,7 +87,14 @@ public class PixtalksUtils {
         }
     }
 
-    public static void getLicenceFromSever(String username, String authCode, String machineCode) {
+    public interface getLicenceCallBack {
+        void onFail(int code,String msg);
+
+        void onSuccess();
+    }
+
+
+    public static void getLicenceFromSever(String username, String authCode, String machineCode, final getLicenceCallBack callBack) {
 
         new AsyncTask<String, Void, LicenceServerResult>() {
             @Override
@@ -147,19 +154,34 @@ public class PixtalksUtils {
 
             @Override
             protected void onPostExecute(LicenceServerResult licenceServerResult) {
+                String msg = null;
+                boolean success = false;
                 if (licenceServerResult != null) {
                     // 从licence 服务器返回的不一定就是合法licence, 服务器端要对访问校验
                     if (licenceServerResult.getCode() == PConfig.gotLicenceCode) {
                         if(!FileUtils.saveStringToSD(PConfig.getPixtalksLicencePath(), licenceServerResult.getContent())){
-                            Log.e(PConfig.projectLogTag, "Fail to write licence to SD card\n");
+                            msg = "Fail to write licence to :" + PConfig.getPixtalksLicencePath();
+                        } else {
+                            success = true;
+                            msg = "Success got licence";
+                        }
                         } else{
-                            Log.e(PConfig.projectLogTag, "Success got licence\n");
+                        msg = "No licence licence got:" + licenceServerResult.getContent();
                         }
                     } else {
-                        Log.e(PConfig.projectLogTag, "No licence licence got:" + licenceServerResult.getContent());
+                    msg = "Fail to get licence from server";
                     }
+
+                if (callBack != null) {
+                    if (success) {
+                        callBack.onSuccess();
+                        Log.d(PConfig.projectLogTag, msg);
                 } else {
-                    Log.e(PConfig.projectLogTag, "Fail to get licence from server");
+                        if (licenceServerResult!=null) {
+                            callBack.onFail(licenceServerResult.getCode(),msg);
+                        }
+                        Log.e(PConfig.projectLogTag, msg);
+                    }
                 }
             }
         }.execute(username, authCode, machineCode);
