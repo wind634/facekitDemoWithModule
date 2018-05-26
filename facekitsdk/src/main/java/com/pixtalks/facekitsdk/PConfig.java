@@ -11,9 +11,18 @@ package com.pixtalks.facekitsdk;
 //ANDROID_SDK_DETECT_ERROR -1002
 
 import android.os.Environment;
+import android.util.Log;
 
 public class PConfig {
+    private static final String TAG = "PConfig";
 
+    static {
+        try {
+            System.loadLibrary("pixtalks_facekit_v1_2");
+        } catch (Exception e) {
+            Log.e(TAG, "Fail to load pixtalks facekit lib");
+        }
+    }
 
     private static String username ="";
     private static String authCode ="";
